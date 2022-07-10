@@ -1,0 +1,132 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.woozooha</groupId>
+    <artifactId>steno-ui</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>Steno UI</name>
+    <description>Steno UI module</description>
+    <url>https://github.com/woozoo73/steno-ui</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/woozoo73/steno-ui.git</connection>
+        <developerConnection>scm:git:ssh://github.com:woozoo73/steno-ui.git</developerConnection>
+        <url>https://github.com/woozoo73/steno-ui/tree/master</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Byeongkil Woo</name>
+            <email>woozoo73@gmail.com</email>
+            <organization>com.github.woozoo73</organization>
+            <organizationUrl>https://github.com/woozoo73</organizationUrl>
+        </developer>
+    </developers>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <destinationDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}/${project.version}</destinationDir>
+        <webjars-locator-core.version>0.48</webjars-locator-core.version>
+        <jquery.version>2.2.1</jquery.version>
+        <jquery-ui.version>1.11.4</jquery-ui.version>
+        <bootstrap.version>5.1.2</bootstrap.version>
+        <spring-boot.version>2.1.3.RELEASE</spring-boot.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.jamesward</groupId>
+                <artifactId>unsnapshot-maven-plugin</artifactId>
+                <version>0.2</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unsnapshot</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <targetPath>${destinationDir}</targetPath>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator-core</artifactId>
+            <version>${webjars-locator-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+</project>

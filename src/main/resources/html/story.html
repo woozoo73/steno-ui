@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Steno - Stories</title>
+    <link rel="stylesheet" href="../3rd-party/bootstrap/5.1.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../3rd-party/fontawesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../3rd-party/highlight/styles/github.min.css">
+    <style >
+        .highlight {
+            background-color: #fff5ad;
+        }
+    </style>
+    <script type="text/javascript" src="../3rd-party/bootstrap/5.1.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../3rd-party/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="../3rd-party/vue-js/2.6.12/vue.js"></script>
+    <script type="text/javascript" src="../3rd-party/d3/3.5.17/d3.min.js"></script>
+    <script type="text/javascript" src="../js/global.js"></script>
+    <script type="text/javascript" src="../js/steno.js"></script>
+    <script type="text/javascript" src="../3rd-party/mermaid/mermaid.min.js"></script>
+    <script type="text/javascript" src="../3rd-party/highlight/highlight.js"></script>
+    <script type="text/javascript" src="../3rd-party/highlight/languages/sql.min.js"></script>
+    <script type="text/javascript" src="../3rd-party/highlight/languages/javascript.min.js"></script>
+    <script type="text/javascript" src="../3rd-party/sql-formatter/3.1.0/sql-formatter.min.js"></script>
+
+    <script type="text/javascript">
+        let currentEvent = null;
+        let formatted = true;
+
+        function oncreateSequenceDiagram() {
+            makeParticipantLink();
+            makeSequenceLink();
+            makeEventLink();
+        }
+
+        function makeParticipantLink() {
+            const participantAreas = d3.selectAll('text.actor>tspan')
+                .filter(function(d, i) {
+                    const participantAlias = d3.select(this).text();
+                    return participantAlias != 'Client' && participantAlias != 'Handler';
+                });
+            console.log(participantAreas);
+
+            participantAreas.on('click', function (i, d) {
+                console.log("click i=" + i + ", d=" + d);
+                app.linkToSource(d3.select(this).text());
+            }).on('mouseover', function() {
+                d3.select(this).style('cursor', 'pointer');
+            }).on('mouseout', function() {
+                d3.select(this).style('cursor', 'default');
+            });
+        }
+
+        function makeSequenceLink() {
+            const sequenceNumberAreas = d3.selectAll('text.sequenceNumber');
+
+            sequenceNumberAreas.on('click', function (i, d) {
+                console.log("click i=" + i + ", d=" + d);
+                $('#sequence-tab').tab('show');
+                const elementId = 'invocation-' + d3.select(this).text();
+                $('.invocation-row').removeClass('highlight');
+                $('#' + elementId).addClass('highlight');
+                showSequenceDetail(d);
+            }).on('mouseover', function() {
+                d3.select(this).style('cursor', 'pointer');
+            }).on('mouseout', function() {
+                d3.select(this).style('cursor', 'default');
+            });
+        }
+
+        function showSequenceDetail(index) {
+            app.setCurrentInvocationsBySequenceIndex(index);
+
+            const sequenceDetailModal = new bootstrap.Modal(document.getElementById("sequenceDetailModal"), {});
+            const title = $('#sequenceDetailTitle');
+            sequenceDetailModal.show();
+        }
+
+        function makeEventLink() {
+            const eventAreas = d3.selectAll('text.noteText>tspan');
+
+            eventAreas.on('click', function (i, d) {
+                console.log("click i=" + i + ", d=" + d);
+                $('#event-tab').tab('show');
+                const elementId = 'event-' + (d + 1);
+                $('.event-row').removeClass('highlight');
+                $('#' + elementId).addClass('highlight');
+                showEventDetail(d);
+            }).on('mouseover', function () {
+                d3.select(this).style('cursor', 'pointer');
+            }).on('mouseout', function () {
+                d3.select(this).style('cursor', 'default');
+            });
+        }
+
+        function showEventDetail(index) {
+            currentEvent = app.events[index];
+
+            if (currentEvent.valueType != 'SQL') {
+                return;
+            }
+
+            formatSql();
+
+            const eventDetailModal = new bootstrap.Modal(document.getElementById("eventDetailModal"), {});
+            const title = $('#eventDetailTitle');
+            title.text(currentEvent.valueType);
+            eventDetailModal.show();
+
+            hljs.highlightAll();
+        }
+
+        function formatSql() {
+            if (!currentEvent) {
+                return;
+            }
+            if (currentEvent.valueType != 'SQL') {
+                return;
+            }
+
+            const content = $('#eventDetailContent');
+            content.text(sqlFormatter.format(currentEvent.eventValue.sql));
+            formatted = true;
+
+            hljs.highlightAll();
+        }
+
+        function unformatSql() {
+            if (!currentEvent) {
+                return;
+            }
+            if (currentEvent.valueType != 'SQL') {
+                return;
+            }
+
+            const content = $('#eventDetailContent');
+            content.text(currentEvent.eventValue.sql);
+            formatted = false;
+
+            hljs.highlightAll();
+        }
+
+        function copyEventDetailToClipboard() {
+            if (!currentEvent) {
+                return;
+            }
+
+            const dummy = $('#clipboardContents');
+            if (formatted) {
+                dummy.text(sqlFormatter.format(currentEvent.eventValue.sql));
+            } else {
+                dummy.text(currentEvent.eventValue.sql);
+            }
+            dummy.show();
+            dummy.select();
+            document.execCommand("copy");
+            dummy.hide();
+        }
+    </script>
+</head>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3 justify-content-between">
+    <div class="navbar-brand p-2">
+        <a class="navbar-brand" href="invocations.html"><span class="h3">AdonisTrack</span></a>
+    </div>
+    <div class="navbar-brand p-2">
+        <a class="navbar-brand" href="config.html"><i class="fa fa-cog"></i></a>
+    </div>
+</nav>
+<body>
+
+<div id="app" class="container">
+
+    <!-- Sequence detail modal -->
+    <div class="modal fade" id="sequenceDetailModal" tabindex="-1" aria-labelledby="eventDetailTitle" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div v-if="currentCallInvocation && currentCallInvocation.id" class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sequenceDetailTitle">Call & Return</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ currentCallInvocation.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>From</th>
+                            <td>
+                                {{ currentCallInvocation.from }}
+                                <a class="btn btn-primary" v-if="currentCallInvocation.from != 'Client' && currentCallInvocation.from != 'Handler'" v-bind:href="'javascript:app.linkToSourceByFqn(\'' + currentCallInvocation.from + '\');'">open</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>To</th>
+                            <td>
+                                {{ currentCallInvocation.to }}
+                                <a class="btn btn-primary" v-if="currentCallInvocation.to != 'Client' && currentCallInvocation.to != 'Handler'" v-bind:href="'javascript:app.linkToSourceByFqn(\'' + currentCallInvocation.to + '\');'">open</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Method</th>
+                            <td>{{ currentCallInvocation.method }}</td>
+                        </tr>
+                        <tr>
+                            <th>Argument types</th>
+                            <td>{{ currentCallInvocation.valueType }}</td>
+                        </tr>
+                        <tr>
+                            <th>Argument values</th>
+                            <td>{{ currentCallInvocation.value }}</td>
+                        </tr>
+                        <tr>
+                            <th>Return type</th>
+                            <td>{{ currentReturnInvocation.valueType }}</td>
+                        </tr>
+                        <tr>
+                            <th>Return value</th>
+                            <td>{{ currentReturnInvocation.value }}</td>
+                        </tr>
+                        <tr>
+                            <th>Duration</th>
+                            <td>{{ currentCallInvocation.duration }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event detail modal -->
+    <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="eventDetailTitle" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventDetailTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <pre><code id="eventDetailContent" class="language-sql"></code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="copyEventDetailButton" type="button" class="btn btn-success" onclick="copyEventDetailToClipboard()">Copy</button>
+                    <button id="formatSql" type="button" class="btn btn-primary" onclick="formatSql()">Format</button>
+                    <button id="unformatSql" type="button" class="btn btn-primary" onclick="unformatSql()">Unformat</button>
+                </div>
+                <textarea id="clipboardContents" style="display: none"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="mermaid">{{ mermaidSequence }}</div>
+    </div>
+
+    <div class="row">
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th colspan="2">Invocation</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th class="thead-light col-3">Id</th>
+                <td class="col-9"><a v-bind:href="'/adonis-track/invocations/' + id" target="_blank">{{ id }}</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <button class="nav-link active" id="web-tab"          data-bs-toggle="tab" data-bs-target="#web-info"          type="button" role="tab" aria-controls="web"         >Request / Response</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"        id="sequence-tab"     data-bs-toggle="tab" data-bs-target="#sequence-info"     type="button" role="tab" aria-controls="sequence"    >Sequence</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"        id="event-tab"        data-bs-toggle="tab" data-bs-target="#event-info"        type="button" role="tab" aria-controls="event"       >Event</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"        id="participants-tab" data-bs-toggle="tab" data-bs-target="#participants-info" type="button" role="tab" aria-controls="participants">Participants</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"        id="json-tab"         data-bs-toggle="tab" data-bs-target="#invocation-info"   type="button" role="tab" aria-controls="invocation"  >Invocation(JSON)</button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link"        id="mermaid-tab"      data-bs-toggle="tab" data-bs-target="#mermaid-info"      type="button" role="tab" aria-controls="mermaid"     >Mermaid(Markup)</button>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-2">
+
+        <div class="tab-pane fade show active" id="web-info">
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th colspan="2">Request</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="thead-light col-3">Method</th>
+                        <td class="col-9">{{ request.method }}</td>
+                    </tr>
+                    <tr>
+                        <th class="thead-light col-3">URI</th>
+                        <td class="col-9">{{ request.requestURI }}</td>
+                    </tr>
+                    <tr>
+                        <th class="thead-light col-3">Query string</th>
+                        <td class="col-9">{{ request.queryString }}</td>
+                    </tr>
+                    <tr v-if="request.headers">
+                        <th class="thead-light col-3" v-bind:rowspan="request.headers.length + 1">Headers</th>
+                        <tr v-for="(header, index) in request.headers">
+                            <td>{{ header.name }}: {{ header.value }}</td>
+                        </tr>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th colspan="2">Response</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="thead-light col-3">Status</th>
+                        <td class="col-9">{{ response.status }} {{ response.reasonPhrase }}</td>
+                    </tr>
+                    <tr v-if="response.headers">
+                        <th class="thead-light col-3" v-bind:rowspan="response.headers.length + 1">Headers</th>
+                        <tr v-for="(header, index) in response.headers">
+                            <td>{{ header.name }}: {{ header.value }}</td>
+                        </tr>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="sequence-info">
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+
+                        <th>From</th>
+                        <th>To</th>
+
+                        <th>Method</th>
+                        <th>Value type</th>
+                        <th>Value(toString)</th>
+
+                        <th>Duration</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(invocation, index) in sequences" v-bind:id="'invocation-' + (index + 1)" class="invocation-row">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ invocation.type }}</td>
+
+                        <td>{{ invocation.from }}</td>
+                        <td>{{ invocation.to }}</td>
+
+                        <td>{{ invocation.method }}</td>
+                        <td>{{ invocation.valueType }}</td>
+                        <td>{{ invocation.value }}</td>
+
+                        <td>{{ invocation.duration }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="event-info">
+            <div class="row">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+                        <th>Message</th>
+                        <th>Detail #1</th>
+                        <th>Detail #2</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-for="(event, index) in events" v-bind:id="'event-' + (index + 1)" class="event-row">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ event.valueType }}</td>
+                        <td>{{ event.message }}</td>
+                        <td v-if="event.valueType == 'SQL'">
+                            <pre>{{ event.eventValue.sql }}</pre>
+                        </td>
+                        <td v-else></td>
+                        <td v-if="event.valueType == 'SQL'">
+                            {{ event.eventValue.parameterMap }}
+                        </td>
+                        <td v-else></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="participants-info">
+            <div class="row">
+                <table class="table">
+                    <tbody>
+                    <tr v-for="(participant, index) in participants">
+                        <td>{{ participant }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="invocation-info">
+            <div class="row">
+                <pre>{{ json }}</pre>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="mermaid-info">
+            <div class="row">
+                <pre>{{ mermaidSequence }}</pre>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="../js/invocation.js"></script>
+<script>
+    const config = {
+        startOnLoad: true,
+        theme: app.getMermaidTheme(),
+        sequence:{
+            useMaxWidth: false,
+            showSequenceNumbers: true
+        },
+        mermaid: {
+            callback: function(id) {
+                oncreateSequenceDiagram();
+            }
+        },
+        maxTextSize : Number.MAX_SAFE_INTEGER,
+        securityLevel: 'loose',
+    };
+    if (app.mermaidTheme) {
+        config['theme'] = app.mermaidTheme;
+    }
+    mermaid.initialize(config);
+</script>
+</body>
+</html>
