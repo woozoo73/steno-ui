@@ -1,33 +1,33 @@
-class AdonisTrack {
+class Steno {
 
-    getInvocations() {
-        let invocations = null;
+    getStories() {
+        let stories = null;
         $.ajax({
-            url: this.getApiRoot() + "/adonis-track/invocations",
+            url: this.getApiRoot() + "/steno/stories",
             method: "GET",
             dataType: "json",
             async: false,
             success: function(data) {
-                invocations = data;
+                stories = data;
             }
         })
 
-        return invocations;
+        return stories;
     }
 
     getInvocation(id) {
-        let invocation = null;
+        let story = null;
         $.ajax({
-            url: this.getApiRoot() + "/adonis-track/invocations/" + id,
+            url: this.getApiRoot() + "/steno/stories/" + id,
             method: "GET",
             dataType: "json",
             async: false,
             success: function(data) {
-                invocation = data;
+                story = data;
             }
         })
 
-        return invocation;
+        return story;
     }
 
     getApiRoot() {
