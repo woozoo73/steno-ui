@@ -1,0 +1,440 @@
+{
+  "id" : "d641e463-StenoTest1-search2-20220731-212346-2a86e6d6",
+  "groupId" : "d641e463",
+  "targetClass" : "com.woozooha.steno.example.wikipedia.StenoTest1",
+  "targetMethod" : {
+    "parameters" : [ ],
+    "declaredAnnotations" : [ { } ],
+    "name" : "search2",
+    "returnType" : "void",
+    "parameterTypes" : [ ],
+    "exceptionTypes" : [ ],
+    "modifiers" : 0,
+    "annotations" : [ { } ],
+    "parameterAnnotations" : [ ],
+    "declaringClass" : "com.woozooha.steno.example.wikipedia.StenoTest1",
+    "typeParameters" : [ ],
+    "default" : false,
+    "synthetic" : false,
+    "parameterCount" : 0,
+    "varArgs" : false,
+    "annotatedReturnType" : {
+      "type" : "void",
+      "annotations" : [ ],
+      "declaredAnnotations" : [ ]
+    },
+    "defaultValue" : null,
+    "genericExceptionTypes" : [ ],
+    "genericParameterTypes" : [ ],
+    "genericReturnType" : "void",
+    "bridge" : false,
+    "annotatedParameterTypes" : [ ],
+    "annotatedExceptionTypes" : [ ],
+    "annotatedReceiverType" : {
+      "type" : "com.woozooha.steno.example.wikipedia.StenoTest1",
+      "annotations" : [ ],
+      "declaredAnnotations" : [ ]
+    },
+    "accessible" : true
+  },
+  "pages" : [ {
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "data:,",
+    "title" : "",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 726,
+        "y0" : 471,
+        "x1" : 1120,
+        "y1" : 515
+      },
+      "by" : "By.id: searchInput",
+      "fieldName" : "searchInput"
+    }, {
+      "rect" : {
+        "x0" : 1059,
+        "y0" : 481,
+        "x1" : 1169,
+        "y1" : 505
+      },
+      "by" : "By.id: searchLanguage",
+      "fieldName" : "searchLanguage"
+    }, {
+      "rect" : {
+        "x0" : 1120,
+        "y0" : 471,
+        "x1" : 1176,
+        "y1" : 515
+      },
+      "by" : "By.className: pure-button",
+      "fieldName" : "searchButton"
+    } ]
+  }, {
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 201,
+        "y0" : 100,
+        "x1" : 1879,
+        "y1" : 138
+      },
+      "by" : "By.id: firstHeading",
+      "fieldName" : "firstHeading"
+    }, {
+      "rect" : {
+        "x0" : 201,
+        "y0" : 145,
+        "x1" : 1879,
+        "y1" : 166
+      },
+      "by" : "By.id: siteSub",
+      "fieldName" : "siteSub"
+    } ]
+  } ],
+  "scenes" : [ {
+    "id" : 0,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "data:,",
+    "title" : "",
+    "elements" : [ ],
+    "events" : [ ]
+  }, {
+    "id" : 1,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "data:,",
+    "title" : "",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "get",
+      "arguments" : [ "https://www.wikipedia.org" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "get",
+      "arguments" : [ "https://www.wikipedia.org" ]
+    } ]
+  }, {
+    "id" : 2,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 726,
+        "y0" : 471,
+        "x1" : 1120,
+        "y1" : 515
+      },
+      "by" : "By.id: searchInput",
+      "fieldName" : "searchInput"
+    } ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: searchInput" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: searchInput" ]
+    } ]
+  }, {
+    "id" : 3,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "sendKeys",
+      "arguments" : [ "[Steno]" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "sendKeys",
+      "arguments" : [ "[Steno]" ]
+    } ]
+  }, {
+    "id" : 4,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 1059,
+        "y0" : 481,
+        "x1" : 1169,
+        "y1" : 505
+      },
+      "by" : "By.id: searchLanguage",
+      "fieldName" : "searchLanguage"
+    } ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: searchLanguage" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: searchLanguage" ]
+    } ]
+  }, {
+    "id" : 5,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getTagName",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getTagName",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 6,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getDomAttribute",
+      "arguments" : [ "multiple" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getDomAttribute",
+      "arguments" : [ "multiple" ]
+    } ]
+  }, {
+    "id" : 7,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "findElements",
+      "arguments" : [ "By.xpath: .//option[normalize-space(.) = \"English\"]" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "findElements",
+      "arguments" : [ "By.xpath: .//option[normalize-space(.) = \"English\"]" ]
+    } ]
+  }, {
+    "id" : 8,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "isSelected",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "isSelected",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 9,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "click",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "click",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 10,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 1120,
+        "y0" : 471,
+        "x1" : 1176,
+        "y1" : 515
+      },
+      "by" : "By.className: pure-button",
+      "fieldName" : "searchButton"
+    } ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.className: pure-button" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.className: pure-button" ]
+    } ]
+  }, {
+    "id" : 11,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+    "url" : "https://www.wikipedia.org/",
+    "title" : "Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "submit",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "submit",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 12,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ ],
+    "events" : [ ]
+  }, {
+    "id" : 13,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 201,
+        "y0" : 100,
+        "x1" : 1879,
+        "y1" : 138
+      },
+      "by" : "By.id: firstHeading",
+      "fieldName" : "firstHeading"
+    } ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: firstHeading" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: firstHeading" ]
+    } ]
+  }, {
+    "id" : 14,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getText",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getText",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 15,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ {
+      "rect" : {
+        "x0" : 201,
+        "y0" : 145,
+        "x1" : 1879,
+        "y1" : 166
+      },
+      "by" : "By.id: siteSub",
+      "fieldName" : "siteSub"
+    } ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: siteSub" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElement",
+      "arguments" : [ "By.id: siteSub" ]
+    } ]
+  }, {
+    "id" : 16,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getText",
+      "arguments" : null
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+      "methodName" : "getText",
+      "arguments" : null
+    } ]
+  }, {
+    "id" : 17,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElements",
+      "arguments" : [ "By.className: toctext" ]
+    }, {
+      "type" : "After",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "findElements",
+      "arguments" : [ "By.className: toctext" ]
+    } ]
+  }, {
+    "id" : 18,
+    "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+    "url" : "https://en.wikipedia.org/wiki/Steno",
+    "title" : "Steno - Wikipedia",
+    "elements" : [ ],
+    "events" : [ {
+      "type" : "Before",
+      "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+      "methodName" : "quit",
+      "arguments" : null
+    } ]
+  } ]
+}

@@ -1,0 +1,8 @@
+{
+  "id" : 12,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+  "url" : "https://en.wikipedia.org/wiki/Steno",
+  "title" : "Steno - Wikipedia",
+  "elements" : [ ],
+  "events" : [ ]
+}

@@ -23,140 +23,6 @@
     <script type="text/javascript" src="../3rd-party/highlight/languages/javascript.min.js"></script>
     <script type="text/javascript" src="../3rd-party/sql-formatter/3.1.0/sql-formatter.min.js"></script>
 
-    <script type="text/javascript">
-        let currentEvent = null;
-        let formatted = true;
-
-        function oncreateSequenceDiagram() {
-            makeParticipantLink();
-            makeSequenceLink();
-            makeEventLink();
-        }
-
-        function makeParticipantLink() {
-            const participantAreas = d3.selectAll('text.actor>tspan')
-                .filter(function(d, i) {
-                    const participantAlias = d3.select(this).text();
-                    return participantAlias != 'Client' && participantAlias != 'Handler';
-                });
-            console.log(participantAreas);
-
-            participantAreas.on('click', function (i, d) {
-                console.log("click i=" + i + ", d=" + d);
-                app.linkToSource(d3.select(this).text());
-            }).on('mouseover', function() {
-                d3.select(this).style('cursor', 'pointer');
-            }).on('mouseout', function() {
-                d3.select(this).style('cursor', 'default');
-            });
-        }
-
-        function makeSequenceLink() {
-            const sequenceNumberAreas = d3.selectAll('text.sequenceNumber');
-
-            sequenceNumberAreas.on('click', function (i, d) {
-                console.log("click i=" + i + ", d=" + d);
-                $('#sequence-tab').tab('show');
-                const elementId = 'invocation-' + d3.select(this).text();
-                $('.invocation-row').removeClass('highlight');
-                $('#' + elementId).addClass('highlight');
-                showSequenceDetail(d);
-            }).on('mouseover', function() {
-                d3.select(this).style('cursor', 'pointer');
-            }).on('mouseout', function() {
-                d3.select(this).style('cursor', 'default');
-            });
-        }
-
-        function showSequenceDetail(index) {
-            app.setCurrentInvocationsBySequenceIndex(index);
-
-            const sequenceDetailModal = new bootstrap.Modal(document.getElementById("sequenceDetailModal"), {});
-            const title = $('#sequenceDetailTitle');
-            sequenceDetailModal.show();
-        }
-
-        function makeEventLink() {
-            const eventAreas = d3.selectAll('text.noteText>tspan');
-
-            eventAreas.on('click', function (i, d) {
-                console.log("click i=" + i + ", d=" + d);
-                $('#event-tab').tab('show');
-                const elementId = 'event-' + (d + 1);
-                $('.event-row').removeClass('highlight');
-                $('#' + elementId).addClass('highlight');
-                showEventDetail(d);
-            }).on('mouseover', function () {
-                d3.select(this).style('cursor', 'pointer');
-            }).on('mouseout', function () {
-                d3.select(this).style('cursor', 'default');
-            });
-        }
-
-        function showEventDetail(index) {
-            currentEvent = app.events[index];
-
-            if (currentEvent.valueType != 'SQL') {
-                return;
-            }
-
-            formatSql();
-
-            const eventDetailModal = new bootstrap.Modal(document.getElementById("eventDetailModal"), {});
-            const title = $('#eventDetailTitle');
-            title.text(currentEvent.valueType);
-            eventDetailModal.show();
-
-            hljs.highlightAll();
-        }
-
-        function formatSql() {
-            if (!currentEvent) {
-                return;
-            }
-            if (currentEvent.valueType != 'SQL') {
-                return;
-            }
-
-            const content = $('#eventDetailContent');
-            content.text(sqlFormatter.format(currentEvent.eventValue.sql));
-            formatted = true;
-
-            hljs.highlightAll();
-        }
-
-        function unformatSql() {
-            if (!currentEvent) {
-                return;
-            }
-            if (currentEvent.valueType != 'SQL') {
-                return;
-            }
-
-            const content = $('#eventDetailContent');
-            content.text(currentEvent.eventValue.sql);
-            formatted = false;
-
-            hljs.highlightAll();
-        }
-
-        function copyEventDetailToClipboard() {
-            if (!currentEvent) {
-                return;
-            }
-
-            const dummy = $('#clipboardContents');
-            if (formatted) {
-                dummy.text(sqlFormatter.format(currentEvent.eventValue.sql));
-            } else {
-                dummy.text(currentEvent.eventValue.sql);
-            }
-            dummy.show();
-            dummy.select();
-            document.execCommand("copy");
-            dummy.hide();
-        }
-    </script>
 </head>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3 justify-content-between">
     <div class="navbar-brand p-2">
@@ -170,135 +36,82 @@
 
 <div id="app" class="container">
 
-    <!-- Sequence detail modal -->
-    <div class="modal fade" id="sequenceDetailModal" tabindex="-1" aria-labelledby="eventDetailTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div v-if="currentCallInvocation && currentCallInvocation.id" class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="sequenceDetailTitle">Call & Return</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tbody>
-                        <tr>
-                            <th>Id</th>
-                            <td>{{ currentCallInvocation.id }}</td>
-                        </tr>
-                        <tr>
-                            <th>From</th>
-                            <td>
-                                {{ currentCallInvocation.from }}
-                                <a class="btn btn-primary" v-if="currentCallInvocation.from != 'Client' && currentCallInvocation.from != 'Handler'" v-bind:href="'javascript:app.linkToSourceByFqn(\'' + currentCallInvocation.from + '\');'">open</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>To</th>
-                            <td>
-                                {{ currentCallInvocation.to }}
-                                <a class="btn btn-primary" v-if="currentCallInvocation.to != 'Client' && currentCallInvocation.to != 'Handler'" v-bind:href="'javascript:app.linkToSourceByFqn(\'' + currentCallInvocation.to + '\');'">open</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Method</th>
-                            <td>{{ currentCallInvocation.method }}</td>
-                        </tr>
-                        <tr>
-                            <th>Argument types</th>
-                            <td>{{ currentCallInvocation.valueType }}</td>
-                        </tr>
-                        <tr>
-                            <th>Argument values</th>
-                            <td>{{ currentCallInvocation.value }}</td>
-                        </tr>
-                        <tr>
-                            <th>Return type</th>
-                            <td>{{ currentReturnInvocation.valueType }}</td>
-                        </tr>
-                        <tr>
-                            <th>Return value</th>
-                            <td>{{ currentReturnInvocation.value }}</td>
-                        </tr>
-                        <tr>
-                            <th>Duration</th>
-                            <td>{{ currentCallInvocation.duration }}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="../test/scene-0.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-1.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-2.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-3.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-4.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-5.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-6.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-7.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-8.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-9.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-10.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-11.png" class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="../test/scene-12.png" class="d-block w-100" alt="...">
             </div>
         </div>
-    </div>
-
-    <!-- Event detail modal -->
-    <div class="modal fade" id="eventDetailModal" tabindex="-1" aria-labelledby="eventDetailTitle" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventDetailTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <pre><code id="eventDetailContent" class="language-sql"></code></pre>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button id="copyEventDetailButton" type="button" class="btn btn-success" onclick="copyEventDetailToClipboard()">Copy</button>
-                    <button id="formatSql" type="button" class="btn btn-primary" onclick="formatSql()">Format</button>
-                    <button id="unformatSql" type="button" class="btn btn-primary" onclick="unformatSql()">Unformat</button>
-                </div>
-                <textarea id="clipboardContents" style="display: none"></textarea>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="mermaid">{{ mermaidSequence }}</div>
-    </div>
-
-    <div class="row">
-        <table class="table">
-            <thead class="thead-light">
-            <tr>
-                <th colspan="2">Invocation</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <th class="thead-light col-3">Id</th>
-                <td class="col-9"><a v-bind:href="'/adonis-track/invocations/' + id" target="_blank">{{ id }}</a></td>
-            </tr>
-            </tbody>
-        </table>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <button class="nav-link active" id="web-tab"          data-bs-toggle="tab" data-bs-target="#web-info"          type="button" role="tab" aria-controls="web"         >Request / Response</button>
+            <button class="nav-link active" id="story-tab"          data-bs-toggle="tab" data-bs-target="#story-info"          type="button" role="tab" aria-controls="story"         >Request / Response</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="sequence-tab"     data-bs-toggle="tab" data-bs-target="#sequence-info"     type="button" role="tab" aria-controls="sequence"    >Sequence</button>
+            <button class="nav-link"        id="page-tab"     data-bs-toggle="tab" data-bs-target="#page-info"     type="button" role="tab" aria-controls="page"    >Sequence</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="event-tab"        data-bs-toggle="tab" data-bs-target="#event-info"        type="button" role="tab" aria-controls="event"       >Event</button>
+            <button class="nav-link"        id="scene-tab"        data-bs-toggle="tab" data-bs-target="#scene-info"        type="button" role="tab" aria-controls="scene"       >Event</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="participants-tab" data-bs-toggle="tab" data-bs-target="#participants-info" type="button" role="tab" aria-controls="participants">Participants</button>
+            <button class="nav-link"        id="element-tab" data-bs-toggle="tab" data-bs-target="#element-info" type="button" role="tab" aria-controls="element">Participants</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="json-tab"         data-bs-toggle="tab" data-bs-target="#invocation-info"   type="button" role="tab" aria-controls="invocation"  >Invocation(JSON)</button>
+            <button class="nav-link"        id="json-tab"         data-bs-toggle="tab" data-bs-target="#json-info"   type="button" role="tab" aria-controls="json"  >Invocation(JSON)</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="mermaid-tab"      data-bs-toggle="tab" data-bs-target="#mermaid-info"      type="button" role="tab" aria-controls="mermaid"     >Mermaid(Markup)</button>
+            <button class="nav-link"        id="html-tab"      data-bs-toggle="tab" data-bs-target="#html-info"      type="button" role="tab" aria-controls="html"     >Mermaid(Markup)</button>
         </li>
     </ul>
 
     <div class="tab-content mt-2">
 
-        <div class="tab-pane fade show active" id="web-info">
+        <div class="tab-pane fade show active" id="story-info">
             <div class="row">
                 <table class="table">
                     <thead class="thead-light">

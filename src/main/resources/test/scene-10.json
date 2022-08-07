@@ -1,0 +1,18 @@
+{
+  "id" : 10,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+  "url" : "https://www.wikipedia.org/",
+  "title" : "Wikipedia",
+  "elements" : [ ],
+  "events" : [ {
+    "type" : "Before",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "findElement",
+    "arguments" : [ "By.className: pure-button" ]
+  }, {
+    "type" : "After",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "findElement",
+    "arguments" : [ "By.className: pure-button" ]
+  } ]
+}
