@@ -1,0 +1,18 @@
+{
+  "id" : 9,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+  "url" : "https://www.wikipedia.org/",
+  "title" : "Wikipedia",
+  "elements" : [ ],
+  "events" : [ {
+    "type" : "Before",
+    "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+    "methodName" : "click",
+    "arguments" : null
+  }, {
+    "type" : "After",
+    "targetName" : "org.openqa.selenium.remote.RemoteWebElement",
+    "methodName" : "click",
+    "arguments" : null
+  } ]
+}

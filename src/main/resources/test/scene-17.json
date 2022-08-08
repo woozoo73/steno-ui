@@ -1,0 +1,18 @@
+{
+  "id" : 17,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+  "url" : "https://en.wikipedia.org/wiki/Steno",
+  "title" : "Steno - Wikipedia",
+  "elements" : [ ],
+  "events" : [ {
+    "type" : "Before",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "findElements",
+    "arguments" : [ "By.className: toctext" ]
+  }, {
+    "type" : "After",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "findElements",
+    "arguments" : [ "By.className: toctext" ]
+  } ]
+}

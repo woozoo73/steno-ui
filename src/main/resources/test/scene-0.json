@@ -1,0 +1,8 @@
+{
+  "id" : 0,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+  "url" : "data:,",
+  "title" : "",
+  "elements" : [ ],
+  "events" : [ ]
+}

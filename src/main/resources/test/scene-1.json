@@ -1,0 +1,18 @@
+{
+  "id" : 1,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.IndexPage",
+  "url" : "data:,",
+  "title" : "",
+  "elements" : [ ],
+  "events" : [ {
+    "type" : "Before",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "get",
+    "arguments" : [ "https://www.wikipedia.org" ]
+  }, {
+    "type" : "After",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "get",
+    "arguments" : [ "https://www.wikipedia.org" ]
+  } ]
+}

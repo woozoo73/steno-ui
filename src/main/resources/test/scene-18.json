@@ -1,0 +1,13 @@
+{
+  "id" : 18,
+  "pageClass" : "com.woozooha.steno.example.wikipedia.ResultPage",
+  "url" : "https://en.wikipedia.org/wiki/Steno",
+  "title" : "Steno - Wikipedia",
+  "elements" : [ ],
+  "events" : [ {
+    "type" : "Before",
+    "targetName" : "org.openqa.selenium.chrome.ChromeDriver",
+    "methodName" : "quit",
+    "arguments" : null
+  } ]
+}
