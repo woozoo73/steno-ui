@@ -10,6 +10,28 @@
         .highlight {
             background-color: #fff5ad;
         }
+        /* https://stackoverflow.com/a/46250461 */
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            height: 100px;
+            width: 100px;
+            outline: black;
+            background-size: 100%, 100%;
+            background-color: #ffd500;
+            border-radius: 50%;
+            border: 3px solid #005bbb;
+            background-image: none;
+        }
+        .carousel-control-next-icon:after {
+            content: '>';
+            font-size: 55px;
+            color: #005bbb;
+        }
+        .carousel-control-prev-icon:after {
+            content: '<';
+            font-size: 55px;
+            color: #005bbb;
+        }
     </style>
     <script type="text/javascript" src="../3rd-party/bootstrap/5.1.2/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="../3rd-party/jquery/3.6.0/jquery.min.js"></script>
@@ -26,7 +48,7 @@
 </head>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3 justify-content-between">
     <div class="navbar-brand p-2">
-        <a class="navbar-brand" href="invocations.html"><span class="h3">Steno</span></a>
+        <a class="navbar-brand" href="stories.html"><span class="h3">Steno</span></a>
     </div>
     <div class="navbar-brand p-2">
         <a class="navbar-brand" href="config.html"><i class="fa fa-cog"></i></a>
@@ -36,53 +58,56 @@
 
 <div id="app" class="container">
 
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+    <div id="sceneSnapshots" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="../test/scene-0.png" class="d-block w-100" alt="...">
+<!--                <img id="scene-snapshot-0"  src="../test/scene-0.png"  class="d-block w-100" alt="...">-->
+                <canvas id="scene-canvas-0"  class="d-block w-100" />
             </div>
             <div class="carousel-item">
-                <img src="../test/scene-1.png" class="d-block w-100" alt="...">
+<!--                <img id="scene-snapshot-1"  src="../test/scene-1.png"  class="d-block w-100" alt="...">-->
+                <canvas id="scene-canvas-1"  class="d-block w-100" />
             </div>
             <div class="carousel-item">
-                <img src="../test/scene-2.png" class="d-block w-100" alt="...">
+<!--                <img id="scene-snapshot-2"  src="../test/scene-2.png"  class="d-block w-100" alt="...">-->
+                <canvas id="scene-canvas-2"  class="d-block w-100" />
             </div>
-            <div class="carousel-item">
-                <img src="../test/scene-3.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-4.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-5.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-6.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-7.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-8.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-9.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-10.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-11.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="../test/scene-12.png" class="d-block w-100" alt="...">
-            </div>
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-3"  src="../test/scene-3.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-4"  src="../test/scene-4.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-5"  src="../test/scene-5.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-6"  src="../test/scene-6.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-7"  src="../test/scene-7.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-8"  src="../test/scene-8.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-9"  src="../test/scene-9.png"  class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-10" src="../test/scene-10.png" class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-11" src="../test/scene-11.png" class="d-block w-100" alt="...">-->
+<!--            </div>-->
+<!--            <div class="carousel-item">-->
+<!--                <img id="scene-snapshot-12" src="../test/scene-12.png" class="d-block w-100" alt="...">-->
+<!--            </div>-->
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#sceneSnapshots" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#sceneSnapshots" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
@@ -90,22 +115,22 @@
 
     <ul class="nav nav-tabs">
         <li class="nav-item">
-            <button class="nav-link active" id="story-tab"          data-bs-toggle="tab" data-bs-target="#story-info"          type="button" role="tab" aria-controls="story"         >Request / Response</button>
+            <button class="nav-link active" id="story-tab"    data-bs-toggle="tab" data-bs-target="#story-info"   type="button" role="tab" aria-controls="story"  >Story</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="page-tab"     data-bs-toggle="tab" data-bs-target="#page-info"     type="button" role="tab" aria-controls="page"    >Sequence</button>
+            <button class="nav-link"        id="page-tab"     data-bs-toggle="tab" data-bs-target="#page-info"    type="button" role="tab" aria-controls="page"   >Page</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="scene-tab"        data-bs-toggle="tab" data-bs-target="#scene-info"        type="button" role="tab" aria-controls="scene"       >Event</button>
+            <button class="nav-link"        id="scene-tab"    data-bs-toggle="tab" data-bs-target="#scene-info"   type="button" role="tab" aria-controls="scene"  >Scene</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="element-tab" data-bs-toggle="tab" data-bs-target="#element-info" type="button" role="tab" aria-controls="element">Participants</button>
+            <button class="nav-link"        id="element-tab"  data-bs-toggle="tab" data-bs-target="#element-info" type="button" role="tab" aria-controls="element">Element</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="json-tab"         data-bs-toggle="tab" data-bs-target="#json-info"   type="button" role="tab" aria-controls="json"  >Invocation(JSON)</button>
+            <button class="nav-link"        id="json-tab"     data-bs-toggle="tab" data-bs-target="#json-info"    type="button" role="tab" aria-controls="json"   >JSON</button>
         </li>
         <li class="nav-item">
-            <button class="nav-link"        id="html-tab"      data-bs-toggle="tab" data-bs-target="#html-info"      type="button" role="tab" aria-controls="html"     >Mermaid(Markup)</button>
+            <button class="nav-link"        id="html-tab"     data-bs-toggle="tab" data-bs-target="#html-info"    type="button" role="tab" aria-controls="html"   >HTML</button>
         </li>
     </ul>
 
@@ -116,169 +141,79 @@
                 <table class="table">
                     <thead class="thead-light">
                     <tr>
-                        <th colspan="2">Request</th>
+                        <th colspan="2">Story</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <th class="thead-light col-3">Method</th>
-                        <td class="col-9">{{ request.method }}</td>
+                        <th class="thead-light col-3"># of page(s)</th>
+                        <td class="col-9">2</td>
                     </tr>
                     <tr>
-                        <th class="thead-light col-3">URI</th>
-                        <td class="col-9">{{ request.requestURI }}</td>
+                        <th class="thead-light col-3"># of scene(s)</th>
+                        <td class="col-9">10</td>
                     </tr>
                     <tr>
-                        <th class="thead-light col-3">Query string</th>
-                        <td class="col-9">{{ request.queryString }}</td>
-                    </tr>
-                    <tr v-if="request.headers">
-                        <th class="thead-light col-3" v-bind:rowspan="request.headers.length + 1">Headers</th>
-                        <tr v-for="(header, index) in request.headers">
-                            <td>{{ header.name }}: {{ header.value }}</td>
-                        </tr>
+                        <th class="thead-light col-3"># of element(s)</th>
+                        <td class="col-9">30</td>
                     </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="row">
-                <table class="table">
-                    <thead class="thead-light">
-                    <tr>
-                        <th colspan="2">Response</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <th class="thead-light col-3">Status</th>
-                        <td class="col-9">{{ response.status }} {{ response.reasonPhrase }}</td>
-                    </tr>
-                    <tr v-if="response.headers">
-                        <th class="thead-light col-3" v-bind:rowspan="response.headers.length + 1">Headers</th>
-                        <tr v-for="(header, index) in response.headers">
-                            <td>{{ header.name }}: {{ header.value }}</td>
-                        </tr>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="sequence-info">
-            <div class="row">
-                <table class="table">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Type</th>
-
-                        <th>From</th>
-                        <th>To</th>
-
-                        <th>Method</th>
-                        <th>Value type</th>
-                        <th>Value(toString)</th>
-
-                        <th>Duration</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(invocation, index) in sequences" v-bind:id="'invocation-' + (index + 1)" class="invocation-row">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ invocation.type }}</td>
-
-                        <td>{{ invocation.from }}</td>
-                        <td>{{ invocation.to }}</td>
-
-                        <td>{{ invocation.method }}</td>
-                        <td>{{ invocation.valueType }}</td>
-                        <td>{{ invocation.value }}</td>
-
-                        <td>{{ invocation.duration }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="event-info">
-            <div class="row">
-                <table class="table">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>#</th>
-                        <th>Type</th>
-                        <th>Message</th>
-                        <th>Detail #1</th>
-                        <th>Detail #2</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="(event, index) in events" v-bind:id="'event-' + (index + 1)" class="event-row">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ event.valueType }}</td>
-                        <td>{{ event.message }}</td>
-                        <td v-if="event.valueType == 'SQL'">
-                            <pre>{{ event.eventValue.sql }}</pre>
-                        </td>
-                        <td v-else></td>
-                        <td v-if="event.valueType == 'SQL'">
-                            {{ event.eventValue.parameterMap }}
-                        </td>
-                        <td v-else></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="participants-info">
-            <div class="row">
-                <table class="table">
-                    <tbody>
-                    <tr v-for="(participant, index) in participants">
-                        <td>{{ participant }}</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="invocation-info">
-            <div class="row">
-                <pre>{{ json }}</pre>
-            </div>
-        </div>
-
-        <div class="tab-pane fade" id="mermaid-info">
-            <div class="row">
-                <pre>{{ mermaidSequence }}</pre>
             </div>
         </div>
 
     </div>
 </div>
 <script src="../js/story.js"></script>
-<script>
-    const config = {
-        startOnLoad: true,
-        theme: app.getMermaidTheme(),
-        sequence:{
-            useMaxWidth: false,
-            showSequenceNumbers: true
-        },
-        mermaid: {
-            callback: function(id) {
-                oncreateSequenceDiagram();
-            }
-        },
-        maxTextSize : Number.MAX_SAFE_INTEGER,
-        securityLevel: 'loose',
-    };
-    if (app.mermaidTheme) {
-        config['theme'] = app.mermaidTheme;
+<script type="text/javascript">
+    function showSceneScreenshots(total) {
+        for (let i = 0; i < total; i++) {
+            showSceneScreenshot(index);
+        }
     }
-    mermaid.initialize(config);
+    function showSceneScreenshot(index) {
+        const canvas = document.getElementById('scene-canvas-' + index);
+        const context = canvas.getContext('2d');
+        const img = new Image()
+        img.src = '../test/scene-' + index + '.png';
+        img.onload = () => {
+            context.drawImage(img, 0, 0);
+        }
+    }
+
+    let $carousel = $('#sceneSnapshots');
+
+    let currentIndex = $('div.active').index();
+    let totalItems = $('.carousel-item').length;
+    console.log('currentIndex=' + currentIndex + ', totalItems=' + totalItems);
+
+    showSceneScreenshots(totalItems);
+
+    //
+
+    // console.log('currentIndex=' + currentIndex + ', totalItems=' + totalItems);
+    // let carouselInner = $('.carousel-inner');
+    // console.log('width=' + carouselInner.width());
+    // console.log('height=' + carouselInner.height());
+    // console.log('top=' + carouselInner.offset().top);
+    // console.log('left=' + carouselInner.offset().left);
+    $carousel.bind('slide.bs.carousel', function (e) {
+        // console.log('slide.bs.carousel! e=' + e);
+        // currentIndex = $('div.active').index() + 1;
+        // if (currentIndex == totalItems) {
+        //     currentIndex = 0;
+        // }
+        // if (currentIndex == 2) {
+        //     //
+        //     showSceneScreenshot(2);
+        // }
+        console.log('currentIndex=' + currentIndex + ', totalItems=' + totalItems);
+        // let sceneSnapshot = $('#scene-snapshot-' + currentIndex);
+        // console.log('sceneSnapshot=' + sceneSnapshot);
+        // console.log('sceneSnapshot=' + sceneSnapshot.width());
+        // console.log('sceneSnapshot=' + sceneSnapshot.height());
+        // console.log('sceneSnapshot=' + sceneSnapshot.src);
+    });
 </script>
 </body>
 </html>
