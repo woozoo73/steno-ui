@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Steno - Stories</title>
+    <title>Steno - Story</title>
     <link rel="stylesheet" href="../3rd-party/bootstrap/5.1.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../3rd-party/fontawesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../3rd-party/highlight/styles/github.min.css">
@@ -259,26 +259,5 @@
     </div>
 </div>
 <script src="../js/story.js"></script>
-<script>
-    const config = {
-        startOnLoad: true,
-        theme: app.getMermaidTheme(),
-        sequence:{
-            useMaxWidth: false,
-            showSequenceNumbers: true
-        },
-        mermaid: {
-            callback: function(id) {
-                oncreateSequenceDiagram();
-            }
-        },
-        maxTextSize : Number.MAX_SAFE_INTEGER,
-        securityLevel: 'loose',
-    };
-    if (app.mermaidTheme) {
-        config['theme'] = app.mermaidTheme;
-    }
-    mermaid.initialize(config);
-</script>
 </body>
 </html>
